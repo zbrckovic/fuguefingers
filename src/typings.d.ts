@@ -3,7 +3,7 @@ declare module '*.css' {
     export default value
 }
 
-declare module '*.scss' {
+declare module '*.sass' {
     const value: any
     export default value
 }

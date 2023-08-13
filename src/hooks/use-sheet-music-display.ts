@@ -1,6 +1,6 @@
-import { type MutableRefObject, useLayoutEffect, useRef, useState } from 'react'
-import { type Cursor, OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
-import { useIsMounted } from './misc-hooks'
+import {type MutableRefObject, useLayoutEffect, useRef, useState} from 'react'
+import {type Cursor, OpenSheetMusicDisplay} from 'opensheetmusicdisplay'
+import {useIsMounted} from './misc-hooks'
 
 interface SheetMusicDisplay {
     readonly isMusicXmlLoaded: boolean
@@ -13,10 +13,12 @@ interface SheetMusicDisplay {
     readonly getNotesUnderCursor: () => Set<number>
 }
 
-export const useSheetMusicDisplay = <T extends HTMLElement> (): [MutableRefObject<T | null>, SheetMusicDisplay | undefined] => {
+type Result<T> = [MutableRefObject<T | null>, SheetMusicDisplay | undefined]
+
+export const useSheetMusicDisplay = <T extends HTMLElement>(): Result<T> => {
     const containerRef = useRef<T>(null)
 
-    const { isMounted, unmount } = useIsMounted()
+    const {isMounted, unmount} = useIsMounted()
     const [musicXmlLoadingState, setMusicXmlLoadingState] = useState<SheetMusicDisplay>()
 
     useLayoutEffect(() => {
@@ -29,18 +31,8 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): [MutableRefObjec
         // Initialize OpenSheetMusicDisplay.
 
         const osmd = new OpenSheetMusicDisplay(containerRef.current)
-        osmd.setOptions({
-            backend: 'svg',
-            drawingParameters: 'compacttight',
-            drawCredits: false,
-            drawTitle: false,
-            drawSubtitle: false,
-            drawComposer: false,
-            drawLyricist: false,
-            drawPartNames: false,
-            renderSingleHorizontalStaffline: true,
-            followCursor: true
-        })
+
+        osmd.setOptions(osmdOptions)
 
         /** Returns the main cursor pointing to the current note. */
         const getCursor = (): Cursor => osmd.cursors[0]
@@ -48,7 +40,7 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): [MutableRefObjec
         setMusicXmlLoadingState({
             isMusicXmlLoaded: false,
             isMusicXmlLoading: false,
-            loadMusicXml (url: string): void {
+            loadMusicXml(url: string): void {
                 if (!isMounted) return
 
                 setMusicXmlLoadingState(prevState => {
@@ -73,11 +65,17 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): [MutableRefObjec
                             }
                         })
                     })
-                    .catch(error => { throw error })
+                    .catch(error => {
+                        throw error
+                    })
             },
-            goBackward (): void { getCursor().previous() },
-            goForward (): void { getCursor().next() },
-            getNotesUnderCursor (): Set<number> {
+            goBackward(): void {
+                getCursor().previous()
+            },
+            goForward(): void {
+                getCursor().next()
+            },
+            getNotesUnderCursor(): Set<number> {
                 const result = new Set<number>()
 
                 getCursor().NotesUnderCursor().forEach(note => {
@@ -99,4 +97,17 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): [MutableRefObjec
     }, [])
 
     return [containerRef, musicXmlLoadingState]
+}
+
+const osmdOptions = {
+    backend: 'svg',
+    drawingParameters: 'compacttight',
+    drawCredits: false,
+    drawTitle: false,
+    drawSubtitle: false,
+    drawComposer: false,
+    drawLyricist: false,
+    drawPartNames: false,
+    renderSingleHorizontalStaffline: true,
+    followCursor: true
 }

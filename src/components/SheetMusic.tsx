@@ -1,11 +1,11 @@
-import React, { type FC, useEffect } from 'react'
-import { useSheetMusicDisplay } from '../hooks/use-sheet-music-display'
+import React, {type FC, useEffect} from 'react'
+import {useSheetMusicDisplay} from '../hooks/use-sheet-music-display'
 
 interface Props {
     musicXml?: string
 }
 
-export const SheetMusic: FC<Props> = ({ musicXml }) => {
+export const SheetMusic: FC<Props> = ({musicXml}) => {
     const [ref, sheetMusicDisplay] = useSheetMusicDisplay<HTMLDivElement>()
 
     const loadMusicXml = sheetMusicDisplay?.loadMusicXml
@@ -15,5 +15,5 @@ export const SheetMusic: FC<Props> = ({ musicXml }) => {
         loadMusicXml(musicXml)
     }, [loadMusicXml, musicXml])
 
-    return <div ref={ ref }/>
+    return <div ref={ref}/>
 }

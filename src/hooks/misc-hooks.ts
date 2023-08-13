@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import {useRef} from 'react'
 
 interface UseMountedHook {
     isMounted: boolean
@@ -6,18 +6,13 @@ interface UseMountedHook {
 }
 
 /**
- * This is a hook which tracks whether the component is mounted or not. It is useful for
- * avoiding state updates on unmounted components.
+ * This is a hook which tracks whether the component is mounted or not. It is useful for avoiding
+ * state updates on unmounted components.
  */
 export const useIsMounted = (): UseMountedHook => {
     const isMountedRef = useRef(true)
-
     const unmount = (): void => {
         isMountedRef.current = false
     }
-
-    return {
-        isMounted: isMountedRef.current,
-        unmount
-    }
+    return {isMounted: isMountedRef.current, unmount}
 }

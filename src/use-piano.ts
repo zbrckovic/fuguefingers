@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import { type Note, type Velocity } from './midi-constants'
 
 /**
  * Keys are MIDI note numbers of active notes and values are their velocities.
  */
-export type MutableNoteVelocities = Record<number, number>
+export type MutableNoteVelocities = Record<Note, Velocity>
 
 export type NoteVelocities = {
     readonly [K in keyof MutableNoteVelocities]: MutableNoteVelocities[K];
