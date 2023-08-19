@@ -1,17 +1,27 @@
-// MIDI code number of a musical note (tone).
+/**
+ * MIDI code number of a musical note (tone).
+ */
 export type Note = number
 
-// MIDI value for note velocity. Only note-start (key-press) velocity is relevant for this app (not
-// the release velocity).
+/**
+ * MIDI value for note velocity. Only note-start (key-press) velocity is relevant for this app (not
+ * the release velocity).
+ */
 export type Velocity = number
 
-// MIDI number of A0
+/**
+ * MIDI number of A0.
+ */
 export const BOTTOM_A: Note = 21
 
-// MIDI number of C4
+/**
+ * MIDI number of C4.
+ */
 export const MIDDLE_C: Note = 48
 
-// MIDI number of C8
+/**
+ * MIDI number of C8.
+ */
 export const TOP_C: Note = 108
 
 export const NOTE_VELOCITY_MAX = 127

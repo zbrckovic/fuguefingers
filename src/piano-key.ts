@@ -1,12 +1,13 @@
-import { BOTTOM_A, type Note, TOP_C } from './midi-constants'
+import {BOTTOM_A, type Note, TOP_C} from './midi-constants'
 
 export interface PianoKey {
     /**
-     * The midi number of the note represented by this key.
+     * The MIDI number of the note represented by this key.
      */
     note: Note
     /**
-     * The number of the octave of this key. The bottom octave of the piano is designated with 0.
+     * The number of the octave of this key. The bottom octave of the piano is designated by number
+     * 0.
      */
     octave: number
     /**

@@ -1,4 +1,4 @@
-import {type Velocity} from '../../midi-constants'
+import {BOTTOM_A, TOP_C, type Velocity} from '../../midi-constants'
 import React, {type FC} from 'react'
 
 import styles from './WhiteKey.module.sass'
@@ -15,19 +15,17 @@ import {
     WHITE_KEY_WIDTH
 } from '../dimensions'
 import {createPathBuilder} from '../../utilities/path-builder'
+import {PianoKey} from "../../piano-key";
 
 interface Props {
     className?: string
+    pianoKey: PianoKey
     velocity?: Velocity
-    highlighted?: boolean
-    ordinal: number
-    edge?: 'bottomA' | 'topC'
 }
 
-export const WhiteKey: FC<Props> = ({ordinal, edge}) =>
-    <path
-        className={classNames(styles.root)}
-        d={getKeyPath(ordinal, edge)}
+export const WhiteKey: FC<Props> = ({pianoKey}) =>
+    <path className={classNames(styles.root)}
+          d={getKeyPath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
     />
 
 const getKeyPath = (ordinal: number, edge?: 'bottomA' | 'topC') => {
@@ -131,3 +129,12 @@ const keyPaths = [
         .vertical(WHITE_KEY_HEIGHT)
         .close()
 ]
+
+const getEdgeFromKey = (keyInfo: PianoKey): 'bottomA' | 'topC' | undefined => {
+    switch (keyInfo.note) {
+        case BOTTOM_A:
+            return 'bottomA'
+        case TOP_C:
+            return 'topC'
+    }
+}
