@@ -1,19 +1,19 @@
-import React, {type FC, useEffect} from 'react'
-import {useSheetMusicDisplay} from '../hooks/use-sheet-music-display'
+import React, {MutableRefObject} from 'react'
+import {SheetMusicDisplay} from "../hooks/use-sheet-music-display";
 
 interface Props {
-    musicXml?: string
+    osmdRef: MutableRefObject<HTMLDivElement | null>
+    sheetMusicDisplay: SheetMusicDisplay | undefined
 }
 
-export const SheetMusic: FC<Props> = ({musicXml}) => {
-    const [ref, sheetMusicDisplay] = useSheetMusicDisplay<HTMLDivElement>()
-
-    const loadMusicXml = sheetMusicDisplay?.loadMusicXml
-
-    useEffect(() => {
-        if (loadMusicXml === undefined || musicXml === undefined) return
-        loadMusicXml(musicXml)
-    }, [loadMusicXml, musicXml])
-
-    return <div ref={ref}/>
+export function SheetMusic({osmdRef, sheetMusicDisplay}: Props) {
+    return <div>
+        <div ref={osmdRef}/>
+        <button disabled={sheetMusicDisplay === undefined}
+                onClick={sheetMusicDisplay?.goBackward}>Backward
+        </button>
+        <button disabled={sheetMusicDisplay === undefined}
+                onClick={sheetMusicDisplay?.goForward}>Forward
+        </button>
+    </div>
 }
