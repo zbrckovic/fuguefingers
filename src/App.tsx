@@ -20,6 +20,8 @@ export const App: FC = () => {
         sheetMusicDisplay.loadMusicXml(musicXml)
     }, [sheetMusicDisplay?.loadMusicXml, musicXml])
 
+    console.log(sheetMusicDisplay?.notesUnderCursor)
+
     return <div>
         <SheetMusic osmdRef={ref} sheetMusicDisplay={sheetMusicDisplay}/>
         <Piano noteVelocities={noteVelocities}/>

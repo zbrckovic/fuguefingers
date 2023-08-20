@@ -14,8 +14,6 @@ export interface SheetMusicDisplay {
 
     /** Moves the main cursor backward. */
     readonly goBackward: () => void
-
-
 }
 
 type Result<T> = [MutableRefObject<T | null>, SheetMusicDisplay | undefined]
@@ -92,6 +90,7 @@ export const useSheetMusicDisplay = <T extends HTMLElement>() => {
             const result = new Set<number>()
 
             getCursor().NotesUnderCursor().forEach(note => {
+                if (note.isRest()) return
                 if (note.NoteTie !== undefined) {
                     const isFirstNoteInTie = note === note.NoteTie.Notes[0]
                     if (!isFirstNoteInTie) return
