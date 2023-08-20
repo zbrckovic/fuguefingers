@@ -20,7 +20,6 @@ export interface SheetMusicDisplay {
 
 type Result<T> = [MutableRefObject<T | null>, SheetMusicDisplay | undefined]
 
-
 export const useSheetMusicDisplay = <T extends HTMLElement>() => {
     const containerRef = useRef<T>(null)
     const {isMounted, unmount} = useIsMounted()
