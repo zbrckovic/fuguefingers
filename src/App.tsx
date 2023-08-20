@@ -1,9 +1,9 @@
-import React, {type FC, useEffect, useState} from 'react'
-import {Piano} from './components/Piano'
-import {usePiano} from './use-piano'
-import {useSheetMusicDisplay} from "./hooks/use-sheet-music-display";
-import prelude from 'music-xml/wtk-prelude-1.xml'
-import {SheetMusic} from "./components/SheetMusic";
+import React, {type FC, useEffect, useMemo, useState} from "react"
+import {Piano} from "./components/Piano"
+import {usePiano} from "./use-piano"
+import {useSheetMusicDisplay} from "./hooks/use-sheet-music-display"
+import prelude from "music-xml/wtk-prelude-1.xml"
+import {SheetMusic} from "./components/SheetMusic"
 
 export const App: FC = () => {
     // Sheet music to display.
@@ -20,10 +20,13 @@ export const App: FC = () => {
         sheetMusicDisplay.loadMusicXml(musicXml)
     }, [sheetMusicDisplay?.loadMusicXml, musicXml])
 
-    console.log(sheetMusicDisplay?.notesUnderCursor)
+    const highlightedNotes: Set<number> = useMemo(
+        () => sheetMusicDisplay?.notesUnderCursor ?? new Set(),
+        [sheetMusicDisplay?.notesUnderCursor]
+    )
 
     return <div>
         <SheetMusic osmdRef={ref} sheetMusicDisplay={sheetMusicDisplay}/>
-        <Piano noteVelocities={noteVelocities}/>
+        <Piano noteVelocities={noteVelocities} highlightedNotes={highlightedNotes}/>
     </div>
 }

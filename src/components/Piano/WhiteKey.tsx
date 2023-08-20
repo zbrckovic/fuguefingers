@@ -1,8 +1,8 @@
-import {BOTTOM_A, TOP_C, type Velocity} from '../../midi-constants'
-import React, {type FC} from 'react'
+import {BOTTOM_A, TOP_C, type Velocity} from "../../midi-constants"
+import React, {type FC} from "react"
 
-import styles from './WhiteKey.module.sass'
-import classNames from 'classnames'
+import styles from "./WhiteKey.module.sass"
+import classNames from "classnames"
 import {
     BLACK_KEY_HEIGHT,
     BLACK_KEY_WIDTH,
@@ -13,26 +13,27 @@ import {
     G_A_OUTER_CUT,
     WHITE_KEY_HEIGHT,
     WHITE_KEY_WIDTH
-} from '../dimensions'
-import {createPathBuilder} from '../../utilities/path-builder'
-import {PianoKey} from "../../piano-key";
+} from "../dimensions"
+import {createPathBuilder} from "../../utilities/path-builder"
+import {PianoKey} from "../../piano-key"
 
 interface Props {
     className?: string
     pianoKey: PianoKey
     velocity?: Velocity
+    highlighted: boolean
 }
 
-export const WhiteKey: FC<Props> = ({pianoKey}) =>
-    <path className={classNames(styles.root)}
+export const WhiteKey: FC<Props> = ({className, pianoKey, highlighted}) =>
+    <path className={classNames(styles.root, {[styles.highlighted]: highlighted}, className)}
           d={getKeyPath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
     />
 
-const getKeyPath = (ordinal: number, edge?: 'bottomA' | 'topC') => {
+const getKeyPath = (ordinal: number, edge?: "bottomA" | "topC") => {
     switch (edge) {
-        case 'bottomA':
+        case "bottomA":
             return bottomA
-        case 'topC':
+        case "topC":
             return topC
         default:
             return keyPaths[ordinal - 1]
@@ -130,11 +131,11 @@ const keyPaths = [
         .close()
 ]
 
-const getEdgeFromKey = (keyInfo: PianoKey): 'bottomA' | 'topC' | undefined => {
+const getEdgeFromKey = (keyInfo: PianoKey): "bottomA" | "topC" | undefined => {
     switch (keyInfo.note) {
         case BOTTOM_A:
-            return 'bottomA'
+            return "bottomA"
         case TOP_C:
-            return 'topC'
+            return "topC"
     }
 }
