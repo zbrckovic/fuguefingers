@@ -3,6 +3,11 @@ export const WHITE_KEY_HEIGHT = 70
 export const BLACK_KEY_WIDTH = 10
 export const BLACK_KEY_HEIGHT = 40
 
+export const BLACK_KEY_TOP_PADDING = 5
+export const BLACK_KEY_BOTTOM_PADDING = 10
+export const WHITE_KEY_TOP_PADDING = 5
+export const WHITE_KEY_BOTTOM_PADDING = 10
+
 // Cut-out on the right side of C key and the left side of E key.
 export const C_E_CUT = WHITE_KEY_WIDTH - (3 * WHITE_KEY_WIDTH - 3 * BLACK_KEY_WIDTH) / 2
 // Cut-out on the left and right side of D key.
