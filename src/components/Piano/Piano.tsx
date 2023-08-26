@@ -22,38 +22,40 @@ interface Props {
     highlightedNotes: Set<number>
 }
 
-export const Piano: FC<Props> = ({className, highlightedNotes}) =>
-    <svg
-        className={classNames(styles.root, className)}
-        viewBox={`${0} ${0} ${KEYBOARD_WIDTH} ${KEYBOARD_HEIGHT}`}
-        width={KEYBOARD_WIDTH}
-        height={KEYBOARD_HEIGHT}
-    >
-        {
-            pianoKeys.white.map((pianoKey, i) => (
-                <svg key={pianoKey.note} y={0} x={i * WHITE_KEY_WIDTH}>
-                    <WhiteKey
-                        pianoKey={pianoKey}
-                        highlighted={highlightedNotes.has(pianoKey.note)}
-                    />
-                </svg>
-            ))
-        }
-        {
-            pianoKeys.black.map(pianoKey => {
-                // Octave 0 starts in negative quadrant because piano doesn't have first 5 keys of
-                // octave 0.
-                const octaveX = (pianoKey.octave) * WHITE_KEY_WIDTH * 7 - 5 * WHITE_KEY_WIDTH
-                const offsetInOctave = getKeyOffset(pianoKey.ordinal)
-                const x = octaveX + offsetInOctave
+export const Piano: FC<Props> = ({className, highlightedNotes, noteVelocities}) => <svg
+    className={classNames(styles.root, className)}
+    viewBox={`${0} ${0} ${KEYBOARD_WIDTH} ${KEYBOARD_HEIGHT}`}
+    width={KEYBOARD_WIDTH}
+    height={KEYBOARD_HEIGHT}
+>
+    {
+        pianoKeys.white.map((pianoKey, i) => (
+            <svg key={pianoKey.note} y={0} x={i * WHITE_KEY_WIDTH}>
+                <WhiteKey
+                    pianoKey={pianoKey}
+                    highlighted={highlightedNotes.has(pianoKey.note)}
+                    velocity={noteVelocities[pianoKey.note]}
+                />
+            </svg>
+        ))
+    }
+    {
+        pianoKeys.black.map(pianoKey => {
+            // Octave 0 starts in negative quadrant because piano doesn't have first 5 keys of
+            // octave 0.
+            const octaveX = (pianoKey.octave) * WHITE_KEY_WIDTH * 7 - 5 * WHITE_KEY_WIDTH
+            const offsetInOctave = getKeyOffset(pianoKey.ordinal)
+            const x = octaveX + offsetInOctave
 
-                return <svg key={pianoKey.note} x={x} y={0}>
-                    <BlackKey pianoKey={pianoKey}
-                              highlighted={highlightedNotes.has(pianoKey.note)}/>
-                </svg>
-            })
-        }
-    </svg>
+            return <svg key={pianoKey.note} x={x} y={0}>
+                <BlackKey pianoKey={pianoKey}
+                          highlighted={highlightedNotes.has(pianoKey.note)}
+                          velocity={noteVelocities[pianoKey.note]}
+                />
+            </svg>
+        })
+    }
+</svg>
 
 
 const getKeyOffset = (function () {

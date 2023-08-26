@@ -2,14 +2,21 @@
 
 .root
   fill: $black-key-color
-  fill-opacity: 0.5
   stroke: black
   cursor: pointer
 
+.highlight
+  fill: $black-key-color-highlighted
+  pointer-events: none
+  visibility: hidden
+
   &.highlighted
-    fill: $black-key-color-highlighted
+    visibility: visible
 
 .velocitySensitivePart
   fill: $black-key-velocity-sensitive-part-color
   stroke-opacity: 0.0
   cursor: pointer
+
+.pressed
+  fill: $black-key-pressed-color

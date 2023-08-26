@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { type Note, type Velocity } from './midi-constants'
+import {useCallback, useState} from "react"
+import {type Note, type Velocity} from "./midi-constants"
 
 /**
  * Keys are MIDI note numbers of active notes and values are their velocities.
@@ -12,26 +12,27 @@ export type NoteVelocities = {
 
 interface PianoHook {
     noteVelocities: NoteVelocities
-    play: (presses: NoteVelocities, releases: ReadonlySet<number>) => void
+    play: (presses?: NoteVelocities, releases?: ReadonlySet<number>) => void
 }
 
 export const usePiano = (): PianoHook => {
     const [noteVelocities, setNoteVelocities] = useState<NoteVelocities>({})
 
-    const play = (presses: NoteVelocities, releases: ReadonlySet<number>): void => {
-        setNoteVelocities(prev => {
-            const next: MutableNoteVelocities = { ...prev }
+    const play = useCallback((presses?: NoteVelocities, releases?: ReadonlySet<number>): void => {
+        setNoteVelocities(prevState => {
+            const nextState: MutableNoteVelocities = {...prevState}
 
-            Object.entries(presses).forEach(([note, velocity]) => {
-                next[Number(note)] = velocity
-            })
+            if (presses !== undefined) {
+                Object.entries(presses).forEach(([note, velocity]) => {
+                    nextState[Number(note)] = velocity
+                })
+            }
 
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            releases.forEach((note) => delete next[note])
+            releases?.forEach((note) => delete nextState[note])
 
-            return next
+            return nextState
         })
-    }
+    }, [])
 
-    return { noteVelocities, play }
+    return {noteVelocities, play}
 }

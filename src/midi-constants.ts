@@ -26,3 +26,8 @@ export const TOP_C: Note = 108
 
 export const NOTE_VELOCITY_MAX = 127
 export const NOTE_VELOCITY_MIN = 0
+
+export enum MidiCommand {
+    NOTE_ON = 0x90,
+    NOTE_OFF = 0x80
+}

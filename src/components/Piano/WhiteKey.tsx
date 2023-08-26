@@ -4,15 +4,16 @@ import React, {type FC} from "react"
 import styles from "./WhiteKey.module.sass"
 import classNames from "classnames"
 import {
-    BLACK_KEY_BOTTOM_PADDING,
     BLACK_KEY_HEIGHT,
     BLACK_KEY_WIDTH,
     C_E_CUT,
     D_CUT,
     F_B_CUT,
     G_A_INNER_CUT,
-    G_A_OUTER_CUT, WHITE_KEY_BOTTOM_PADDING,
-    WHITE_KEY_HEIGHT, WHITE_KEY_TOP_PADDING,
+    G_A_OUTER_CUT,
+    WHITE_KEY_BOTTOM_PADDING,
+    WHITE_KEY_HEIGHT,
+    WHITE_KEY_TOP_PADDING,
     WHITE_KEY_WIDTH
 } from "../dimensions"
 import {createPathBuilder} from "../../utilities/path-builder"
@@ -25,21 +26,30 @@ interface Props {
     highlighted: boolean
 }
 
-export const WhiteKey: FC<Props> = ({className, pianoKey, highlighted}) =>
-    <>
-        <path className={classNames(styles.root, {[styles.highlighted]: highlighted}, className)}
-              d={getKeyPath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
-              onClick={() => {
-                  console.log("edge part")
-              }}
-        />
-        <path className={classNames(styles.velocitySensitivePart)}
-              d={getVelocitySensitivePath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
-              onClick={() => {
-                  console.log("velocity sensitive part")
-              }}
-        />
-    </>
+export const WhiteKey: FC<Props> = ({className, pianoKey, highlighted, velocity}) => <>
+    <path className={
+        classNames(styles.root, {
+            [styles.highlighted]: highlighted,
+            [styles.pressed]: velocity !== undefined
+        }, className)
+    }
+          d={getKeyPath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
+          onClick={() => {
+              console.log("edge part")
+          }}
+    />
+    <path className={
+        classNames(styles.highlight, {[styles.highlighted]: highlighted}, className)
+    }
+          d={getKeyPath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
+    />
+    <path className={classNames(styles.velocitySensitivePart)}
+          d={getVelocitySensitivePath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
+          onClick={() => {
+              console.log("velocity sensitive part")
+          }}
+    />
+</>
 
 const createKeyPaths = (topPadding: number = 0, bottomPadding: number = 0) => {
     // SVG paths for all white keys.

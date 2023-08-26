@@ -18,21 +18,29 @@ interface Props {
     highlighted: boolean
 }
 
-export const BlackKey: FC<Props> = ({className, highlighted}) =>
-    <>
-        <path className={classNames(styles.root, {[styles.highlighted]: highlighted}, className)}
-              d={keyPath}
-              onClick={() => {
-                  console.log("edge part")
-              }}
-        />
-        <path className={classNames(styles.velocitySensitivePart)}
-              d={velocitySensitivePartPath}
-              onClick={() => {
-                  console.log("velocity sensitive part")
-              }}
-        />
-    </>
+export const BlackKey: FC<Props> = ({className, highlighted, velocity}) => <>
+    <path className={
+        classNames(styles.root, {
+            [styles.pressed]: velocity !== undefined
+        }, className)
+    }
+          d={keyPath}
+          onClick={() => {
+              console.log("edge part")
+          }}
+    />
+    <path className={
+        classNames(styles.highlight, {[styles.highlighted]: highlighted}, className)
+    }
+          d={keyPath}
+    />
+    <path className={classNames(styles.velocitySensitivePart)}
+          d={velocitySensitivePartPath}
+          onClick={() => {
+              console.log("velocity sensitive part")
+          }}
+    />
+</>
 
 
 const createKeyPath = (topPadding = 0, bottomPadding = 0) => createPathBuilder()
