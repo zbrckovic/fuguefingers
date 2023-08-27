@@ -1,43 +1,31 @@
 import React, {type FC, useEffect, useMemo, useState} from "react"
-import {Piano} from "./components/Piano"
-import {usePiano} from "./use-piano"
-import {useSheetMusicDisplay} from "./hooks/use-sheet-music-display"
+import {Piano} from "../Piano"
+import {useSheetMusicDisplay} from "../../hooks/use-sheet-music-display"
 import prelude from "music-xml/wtk-prelude-1.xml"
-import {SheetMusic} from "./components/SheetMusic"
-import {Note, Velocity} from "./midi-constants"
-import {useMidiListener} from "./hooks/use-midi-listener"
-import {useMidiInputs} from "./hooks/use-midi-inputs"
+import {SheetMusic} from "../SheetMusic"
+import {useMidiInputListener} from "../../hooks/use-midi-input-listener"
+import {useMidiInputsUpdater} from "../../hooks/use-midi-inputs-updater"
+import {useMidiInputsState} from "./use-midi-inputs-state"
+import {usePianoKeyboardState} from "./use-piano-keyboard-state"
 
 export const App: FC = () => {
     // Sheet music to display.
     const [musicXml] = useState(prelude)
 
-    // Current state of the piano keyboard.
-    const {noteVelocities, play} = usePiano()
-
-    const inputs = useMidiInputs()
-    const [selectedInputName, setSelectedInputName] = useState<string>()
-    const selectedInput = useMemo(
-        () => selectedInputName !== undefined ? inputs[selectedInputName] : undefined,
-        [inputs, selectedInputName]
-    )
-
-    const [press, release] = useMemo(() => {
-        const press = (note: Note, velocity: Velocity) => {
-            play({[note]: velocity})
-        }
-
-        const release = (note: Note) => {
-            play(undefined, new Set([note]))
-        }
-
-        return [press, release]
-    }, [play])
-
-    useMidiListener(selectedInput, press, release)
+    const {
+        midiInputs,
+        selectedMidiInputName,
+        selectedMidiInput,
+        setSelectedMidiInputName,
+        setMidiInputs
+    } = useMidiInputsState()
+    const {noteVelocities, press, release} = usePianoKeyboardState()
+    useMidiInputsUpdater(setMidiInputs)
+    useMidiInputListener(selectedMidiInput, press, release)
 
     const [ref, sheetMusicDisplay] = useSheetMusicDisplay<HTMLDivElement>()
 
+    // Load sheet music when both sheet music display and music xml are ready.
     useEffect(() => {
         if (sheetMusicDisplay === undefined) return
         if (musicXml === undefined) return
@@ -58,19 +46,21 @@ export const App: FC = () => {
         highlightedNotes.forEach(note => {
             areAllNotesPressed = areAllNotesPressed && noteVelocities[note] !== undefined
         })
-        if (areAllNotesPressed) goForward()
+        if (areAllNotesPressed) {
+            goForward()
+            // TODO: think about cancelling pressed notes somehow.
+        }
     }, [noteVelocities, highlightedNotes, sheetMusicDisplay])
 
     return <div>
         <SheetMusic osmdRef={ref} sheetMusicDisplay={sheetMusicDisplay}/>
         <Piano noteVelocities={noteVelocities} highlightedNotes={highlightedNotes}/>
-        <select value={selectedInputName} onChange={({target}) => {
-            setSelectedInputName(target.value)
+        <select value={selectedMidiInputName} onChange={({target}) => {
+            setSelectedMidiInputName(target.value)
         }}>
             <option value={"/"}/>
             {
-
-                Object.entries(inputs).map(([id, input]) =>
+                Object.entries(midiInputs).map(([id, input]) =>
                     <option key={id} value={id}>
                         {input.name}
                     </option>
@@ -79,3 +69,5 @@ export const App: FC = () => {
         </select>
     </div>
 }
+
+

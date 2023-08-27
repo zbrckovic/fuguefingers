@@ -10,6 +10,11 @@ export type Note = number
 export type Velocity = number
 
 /**
+ * Keys are MIDI note numbers of active notes and values are their velocities.
+*/
+export type NoteVelocities = Record<Note, Velocity>;
+
+/**
  * MIDI number of A0.
  */
 export const BOTTOM_A: Note = 21
@@ -31,3 +36,5 @@ export enum MidiCommand {
     NOTE_ON = 0x90,
     NOTE_OFF = 0x80
 }
+
+export type MidiInputs = Record<string, MIDIInput>

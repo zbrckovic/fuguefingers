@@ -1,10 +1,13 @@
 import {useIsMounted} from "./misc-hooks"
-import {useEffect, useState} from "react"
+import {Dispatch, SetStateAction, useEffect} from "react"
+import {MidiInputs} from "../midi-constants"
 
-export const useMidiInputs = () => {
+/**
+ * Loads MIDI inputs and updates the state with them.
+ * @param setInputs - State setter for MIDI inputs.
+ */
+export const useMidiInputsUpdater = (setInputs: Dispatch<SetStateAction<MidiInputs>>) => {
     const {isMounted, unmount} = useIsMounted()
-
-    const [inputs, setInputs] = useState<Record<string, MIDIInput>>({})
 
     useEffect(() => {
         navigator.requestMIDIAccess().then(access => {
@@ -38,6 +41,4 @@ export const useMidiInputs = () => {
 
         return unmount
     }, [])
-
-    return inputs
 }

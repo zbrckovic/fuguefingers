@@ -2,7 +2,13 @@ import {MidiCommand, Note} from "../midi-constants"
 import {useIsMounted} from "./misc-hooks"
 import {useEffect} from "react"
 
-export const useMidiListener = (
+/**
+ * Listens to MIDI input and calls the appropriate callback when a note is pressed or released.
+ * @param input - MIDI input to listen to.
+ * @param press - Callback to call when a note is pressed.
+ * @param release - Callback to call when a note is released.
+ */
+export const useMidiInputListener = (
     input: MIDIInput | undefined,
     press: (node: Note, velocity: number) => void,
     release: (note: Note) => void
