@@ -32,7 +32,7 @@ export const App: FC = () => {
         sheetMusicDisplay.loadMusicXml(musicXml)
     }, [sheetMusicDisplay?.loadMusicXml, musicXml])
 
-    const highlightedNotes: Set<number> = useMemo(
+    const markedNotes: Set<number> = useMemo(
         () => sheetMusicDisplay?.notesUnderCursor ?? new Set(),
         [sheetMusicDisplay?.notesUnderCursor]
     )
@@ -43,18 +43,23 @@ export const App: FC = () => {
         if (!isMusicXmlLoaded) return
 
         let areAllNotesPressed = true
-        highlightedNotes.forEach(note => {
+        markedNotes.forEach(note => {
             areAllNotesPressed = areAllNotesPressed && noteVelocities[note] !== undefined
         })
         if (areAllNotesPressed) {
             goForward()
             // TODO: think about cancelling pressed notes somehow.
         }
-    }, [noteVelocities, highlightedNotes, sheetMusicDisplay])
+    }, [noteVelocities, markedNotes, sheetMusicDisplay])
 
     return <div>
         <SheetMusic osmdRef={ref} sheetMusicDisplay={sheetMusicDisplay}/>
-        <Piano noteVelocities={noteVelocities} highlightedNotes={highlightedNotes}/>
+        <Piano
+            noteVelocities={noteVelocities}
+            markedNotes={markedNotes}
+            onPress={press}
+            onRelease={release}
+        />
         <select value={selectedMidiInputName} onChange={({target}) => {
             setSelectedMidiInputName(target.value)
         }}>

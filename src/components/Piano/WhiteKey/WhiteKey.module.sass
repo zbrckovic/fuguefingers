@@ -1,0 +1,22 @@
+@import '../../../styles/definitions.sass'
+
+.background
+  fill: $white-key-color
+  stroke: black
+  cursor: pointer
+
+  &.pressed
+    fill: $white-key-pressed-color
+
+.velocitySensitivePart
+  fill: none
+  stroke: none
+  cursor: pointer
+
+.marker
+  fill: $black-key-color
+  pointer-events: none
+
+  visibility: hidden
+  &.marked
+    visibility: visible

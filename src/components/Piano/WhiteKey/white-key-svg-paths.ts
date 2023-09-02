@@ -1,57 +1,13 @@
-import {BOTTOM_A, TOP_C, type Velocity} from "../../midi-constants"
-import React, {type FC} from "react"
-
-import styles from "./WhiteKey.module.sass"
-import classNames from "classnames"
+import {createPathBuilder} from "../../../utilities/path-builder";
 import {
-    BLACK_KEY_HEIGHT,
-    BLACK_KEY_WIDTH,
+    BLACK_KEY_HEIGHT, BLACK_KEY_WIDTH,
     C_E_CUT,
-    D_CUT,
-    F_B_CUT,
-    G_A_INNER_CUT,
-    G_A_OUTER_CUT,
-    WHITE_KEY_BOTTOM_PADDING,
-    WHITE_KEY_HEIGHT,
-    WHITE_KEY_TOP_PADDING,
+    D_CUT, F_B_CUT, G_A_INNER_CUT, G_A_OUTER_CUT, WHITE_KEY_BOTTOM_PADDING,
+    WHITE_KEY_HEIGHT, WHITE_KEY_TOP_PADDING,
     WHITE_KEY_WIDTH
-} from "../dimensions"
-import {createPathBuilder} from "../../utilities/path-builder"
-import {PianoKey} from "../../piano-key"
+} from "../../dimensions";
 
-interface Props {
-    className?: string
-    pianoKey: PianoKey
-    velocity?: Velocity
-    highlighted: boolean
-}
-
-export const WhiteKey: FC<Props> = ({className, pianoKey, highlighted, velocity}) => <>
-    <path className={
-        classNames(styles.root, {
-            [styles.highlighted]: highlighted,
-            [styles.pressed]: velocity !== undefined
-        }, className)
-    }
-          d={getKeyPath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
-          onClick={() => {
-              console.log("edge part")
-          }}
-    />
-    <path className={
-        classNames(styles.highlight, {[styles.highlighted]: highlighted}, className)
-    }
-          d={getKeyPath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
-    />
-    <path className={classNames(styles.velocitySensitivePart)}
-          d={getVelocitySensitivePath(pianoKey.ordinal, getEdgeFromKey(pianoKey))}
-          onClick={() => {
-              console.log("velocity sensitive part")
-          }}
-    />
-</>
-
-const createKeyPaths = (topPadding: number = 0, bottomPadding: number = 0) => {
+const createKeyPathSupplier = (topPadding: number = 0, bottomPadding: number = 0) => {
     // SVG paths for all white keys.
     const keyPaths = [
         // C
@@ -145,7 +101,6 @@ const createKeyPaths = (topPadding: number = 0, bottomPadding: number = 0) => {
         .vertical(WHITE_KEY_HEIGHT - topPadding - bottomPadding)
         .close()
 
-
     return (ordinal: number, edge?: "bottomA" | "topC") => {
         switch (edge) {
             case "bottomA":
@@ -158,15 +113,8 @@ const createKeyPaths = (topPadding: number = 0, bottomPadding: number = 0) => {
     }
 }
 
-const getKeyPath = createKeyPaths()
-const getVelocitySensitivePath = createKeyPaths(WHITE_KEY_TOP_PADDING, WHITE_KEY_BOTTOM_PADDING)
-
-const getEdgeFromKey = (keyInfo: PianoKey): "bottomA" | "topC" | undefined => {
-    switch (keyInfo.note) {
-        case BOTTOM_A:
-            return "bottomA"
-        case TOP_C:
-            return "topC"
-    }
-}
-
+export const getMainShapePath = createKeyPathSupplier()
+export const getVelocitySensitiveShapePath = createKeyPathSupplier(
+    WHITE_KEY_TOP_PADDING,
+    WHITE_KEY_BOTTOM_PADDING
+)
