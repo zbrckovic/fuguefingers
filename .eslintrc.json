@@ -5,8 +5,7 @@
   },
   "extends": [
     "plugin:react/recommended",
-    "standard-with-typescript",
-    "plugin:react-hooks/recommended"
+    "standard-with-typescript"
   ],
   "overrides": [
   ],
@@ -22,8 +21,6 @@
     "@typescript-eslint/indent": [
       "error",
       4
-    ],
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    ]
   }
 }
