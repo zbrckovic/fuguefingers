@@ -1,7 +1,7 @@
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 
 interface UseMountedHook {
-    isMounted: boolean
+    isMounted: () => boolean
     unmount: () => void
 }
 
@@ -11,8 +11,9 @@ interface UseMountedHook {
  */
 export const useIsMounted = (): UseMountedHook => {
     const isMountedRef = useRef(true)
-    const unmount = (): void => {
-        isMountedRef.current = false
-    }
-    return { isMounted: isMountedRef.current, unmount }
+
+    const isMounted = useCallback((): boolean => isMountedRef.current, [])
+    const unmount = useCallback((): void => { isMountedRef.current = false }, [])
+
+    return { isMounted, unmount }
 }

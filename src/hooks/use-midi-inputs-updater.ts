@@ -13,10 +13,10 @@ export const useMidiInputsUpdater = (setInputs: Dispatch<SetStateAction<MidiInpu
         navigator
             .requestMIDIAccess()
             .then(access => {
-                if (!isMounted) return
+                if (!isMounted()) return
 
                 access.onstatechange = (event) => {
-                    if (!isMounted) return
+                    if (!isMounted()) return
 
                     if (!(event instanceof MIDIConnectionEvent)) return
                     const { port } = event
@@ -42,5 +42,5 @@ export const useMidiInputsUpdater = (setInputs: Dispatch<SetStateAction<MidiInpu
             .catch(console.error)
 
         return unmount
-    }, [])
+    }, [setInputs, isMounted, unmount])
 }

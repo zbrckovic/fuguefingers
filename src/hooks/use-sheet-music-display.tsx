@@ -43,7 +43,7 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
             osmd
                 .load(url)
                 .then(() => {
-                    if (!isMounted) return
+                    if (!isMounted()) return
                     osmd.render()
                     getCursor().show()
                     setSheetMusicDisplayMusicDisplay(prev => prev === undefined
@@ -109,7 +109,7 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
 
             return result
         }
-    }, [])
+    }, [isMounted, unmount])
 
     return [containerRef, sheetMusicDisplay] as Result<T>
 }

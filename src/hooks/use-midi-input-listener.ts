@@ -20,7 +20,7 @@ export const useMidiInputListener = (
         console.log('Listening to MIDI input', input.name)
 
         input.onmidimessage = (event) => {
-            if (!isMounted) return
+            if (!isMounted()) return
 
             if (!(event instanceof MIDIMessageEvent)) return
 
@@ -41,5 +41,5 @@ export const useMidiInputListener = (
         }
 
         return unmount
-    }, [input])
+    }, [input, press, release, isMounted, unmount])
 }
