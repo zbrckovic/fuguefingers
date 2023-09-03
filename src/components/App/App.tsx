@@ -47,13 +47,19 @@ export const App: FC = () => {
 
         let areAllNotesPressed = true
         markedNotes.forEach(note => {
-            areAllNotesPressed = areAllNotesPressed && momentaryPianoState.noteVelocities[note] !== undefined
+            areAllNotesPressed =
+                areAllNotesPressed && momentaryPianoState.noteVelocities[note] !== undefined
         })
         if (areAllNotesPressed) {
             momentaryPianoState.clear()
             goForward()
         }
-    }, [pianoState.noteVelocities, markedNotes, sheetMusicDisplay])
+    }, [
+        momentaryPianoState.noteVelocities,
+        momentaryPianoState.clear,
+        markedNotes,
+        sheetMusicDisplay
+    ])
 
 
     const {
