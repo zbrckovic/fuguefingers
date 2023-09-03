@@ -1,20 +1,14 @@
-import React, {type FC} from "react"
-import classNames from "classnames"
-import styles from "./Piano.module.sass"
+import classNames from 'classnames'
+import React, { type FC } from 'react'
+import { type NoteVelocities } from '../../midi-constants'
+import { pianoKeys } from '../../piano-key'
 import {
-    A_SHARP_OFFSET,
-    C_SHARP_OFFSET,
-    D_SHARP_OFFSET,
-    F_SHARP_OFFSET,
-    G_SHARP_OFFSET,
-    KEYBOARD_HEIGHT,
-    KEYBOARD_WIDTH,
-    WHITE_KEY_WIDTH
-} from "../dimensions"
-import {pianoKeys} from "../../piano-key"
-import {WhiteKey} from "./WhiteKey"
-import {BlackKey} from "./BlackKey"
-import {NoteVelocities} from "../../midi-constants";
+    A_SHARP_OFFSET, C_SHARP_OFFSET, D_SHARP_OFFSET, F_SHARP_OFFSET, G_SHARP_OFFSET, KEYBOARD_HEIGHT,
+    KEYBOARD_WIDTH, WHITE_KEY_WIDTH
+} from '../dimensions'
+import { BlackKey } from './BlackKey'
+import styles from './Piano.module.sass'
+import { WhiteKey } from './WhiteKey'
 
 interface Props {
     className?: string
@@ -24,7 +18,7 @@ interface Props {
     onRelease: (note: number) => void
 }
 
-export const Piano: FC<Props> = ({className, noteVelocities, markedNotes, onPress, onRelease}) =>
+export const Piano: FC<Props> = ({ className, noteVelocities, markedNotes, onPress, onRelease }) =>
     <svg
         className={classNames(styles.root, className)}
         viewBox={`${0} ${0} ${KEYBOARD_WIDTH} ${KEYBOARD_HEIGHT}`}
@@ -72,7 +66,6 @@ export const Piano: FC<Props> = ({className, noteVelocities, markedNotes, onPres
             })
         }
     </svg>
-
 
 const getKeyOffset = (function () {
     const keyOffsets = [

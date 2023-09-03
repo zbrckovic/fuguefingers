@@ -1,4 +1,4 @@
-import {BOTTOM_A, type Note, TOP_C} from './midi-constants'
+import { BOTTOM_A, type Note, TOP_C } from './midi-constants'
 
 export interface PianoKey {
     /**
@@ -28,7 +28,12 @@ export interface PianoKey {
     ordinal: number
 }
 
-const calculateKeys = () => {
+interface PianoKeys {
+    white: PianoKey[]
+    black: PianoKey[]
+}
+
+const calculateKeys = (): PianoKeys => {
     const calculatePianoKeyInfo = (note: Note): PianoKey => {
         const chromaticDegree = calculateChromaticDegree(note)
         const octave = calculateOctave(note)
@@ -46,9 +51,9 @@ const calculateKeys = () => {
         }
     }
 
-    const calculateChromaticDegree = (note: Note) => note % 12 + 1
+    const calculateChromaticDegree = (note: Note): number => note % 12 + 1
 
-    const calculateOctave = (note: Note) => Math.floor(note / 12) - 1
+    const calculateOctave = (note: Note): number => Math.floor(note / 12) - 1
 
     const whiteKeysOrdinals: Record<number, number> = {
         1: 1, // C

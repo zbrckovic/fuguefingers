@@ -1,6 +1,6 @@
-import {MidiCommand, Note} from "../midi-constants"
-import {useIsMounted} from "./misc-hooks"
-import {useEffect} from "react"
+import { useEffect } from 'react'
+import { MidiCommand, type Note } from '../midi-constants'
+import { useIsMounted } from './misc-hooks'
 
 /**
  * Listens to MIDI input and calls the appropriate callback when a note is pressed or released.
@@ -12,12 +12,12 @@ export const useMidiInputListener = (
     input: MIDIInput | undefined,
     press: (node: Note, velocity: number) => void,
     release: (note: Note) => void
-) => {
-    const {isMounted, unmount} = useIsMounted()
+): void => {
+    const { isMounted, unmount } = useIsMounted()
 
     useEffect(() => {
         if (input === undefined) return
-        console.log("Listening to MIDI input", input.name)
+        console.log('Listening to MIDI input', input.name)
 
         input.onmidimessage = (event) => {
             if (!isMounted) return
@@ -28,7 +28,6 @@ export const useMidiInputListener = (
             const note = event.data[1]
             const velocity = event.data[2]
 
-            const ch = status & 0x0F
             const command = status & 0xF0
 
             switch (command) {

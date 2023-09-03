@@ -11,8 +11,8 @@ export type Velocity = number
 
 /**
  * Keys are MIDI note numbers of active notes and values are their velocities.
-*/
-export type NoteVelocities = Record<Note, Velocity>;
+ */
+export type NoteVelocities = Record<Note, Velocity>
 
 /**
  * MIDI number of A0.

@@ -1,4 +1,4 @@
-import {useRef} from 'react'
+import { useRef } from 'react'
 
 interface UseMountedHook {
     isMounted: boolean
@@ -14,5 +14,5 @@ export const useIsMounted = (): UseMountedHook => {
     const unmount = (): void => {
         isMountedRef.current = false
     }
-    return {isMounted: isMountedRef.current, unmount}
+    return { isMounted: isMountedRef.current, unmount }
 }

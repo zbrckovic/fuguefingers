@@ -1,10 +1,10 @@
-import {MutableRefObject, useLayoutEffect, useRef, useState} from "react";
-import {Cursor, OpenSheetMusicDisplay} from "opensheetmusicdisplay";
-import {useIsMounted} from "./misc-hooks";
+import { type Cursor, OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
+import { type MutableRefObject, useLayoutEffect, useRef, useState } from 'react'
+import { useIsMounted } from './misc-hooks'
 
 export interface SheetMusicDisplay {
-    readonly isMusicXmlLoaded: boolean,
-    readonly isMusicXmlLoading: boolean,
+    readonly isMusicXmlLoaded: boolean
+    readonly isMusicXmlLoading: boolean
     readonly notesUnderCursor: Set<number>
 
     readonly loadMusicXml: (url: string) => void
@@ -18,9 +18,9 @@ export interface SheetMusicDisplay {
 
 type Result<T> = [MutableRefObject<T | null>, SheetMusicDisplay | undefined]
 
-export const useSheetMusicDisplay = <T extends HTMLElement>() => {
+export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
     const containerRef = useRef<T>(null)
-    const {isMounted, unmount} = useIsMounted()
+    const { isMounted, unmount } = useIsMounted()
     const [sheetMusicDisplay, setSheetMusicDisplayMusicDisplay] = useState<SheetMusicDisplay | undefined>()
 
     useLayoutEffect(() => {
@@ -32,11 +32,13 @@ export const useSheetMusicDisplay = <T extends HTMLElement>() => {
         const osmd = new OpenSheetMusicDisplay(containerRef.current)
         osmd.setOptions(osmdOptions)
 
-        function loadMusicXml(url: string) {
-            setSheetMusicDisplayMusicDisplay(prev => prev === undefined ? undefined : ({
-                ...prev,
-                isMusicXmlLoading: true
-            }))
+        function loadMusicXml (url: string): void {
+            setSheetMusicDisplayMusicDisplay(prev => prev === undefined
+                ? undefined
+                : ({
+                    ...prev,
+                    isMusicXmlLoading: true
+                }))
 
             osmd
                 .load(url)
@@ -44,23 +46,25 @@ export const useSheetMusicDisplay = <T extends HTMLElement>() => {
                     if (!isMounted) return
                     osmd.render()
                     getCursor().show()
-                    setSheetMusicDisplayMusicDisplay(prev => prev === undefined ? undefined : {
-                        ...prev,
-                        isMusicXmlLoaded: true,
-                        isMusicXmlLoading: false
-                    })
+                    setSheetMusicDisplayMusicDisplay(prev => prev === undefined
+                        ? undefined
+                        : {
+                            ...prev,
+                            isMusicXmlLoaded: true,
+                            isMusicXmlLoading: false
+                        })
                     updateNotesUnderCursor()
                 })
                 .catch(error => { throw error })
         }
 
-        function goBackward() {
-            getCursor().previous();
+        const goBackward = (): void => {
+            getCursor().previous()
             updateNotesUnderCursor()
         }
 
-        function goForward() {
-            getCursor().next();
+        const goForward = (): void => {
+            getCursor().next()
             updateNotesUnderCursor()
         }
 
@@ -76,17 +80,19 @@ export const useSheetMusicDisplay = <T extends HTMLElement>() => {
         return unmount
 
         /** Returns the main cursor pointing to the current note. */
-        function getCursor(): Cursor { return osmd.cursors[0]; }
+        function getCursor (): Cursor { return osmd.cursors[0] }
 
-        function updateNotesUnderCursor() {
+        function updateNotesUnderCursor (): void {
             const notesUnderCursor = getNotesUnderCursor()
-            setSheetMusicDisplayMusicDisplay(prev => prev === undefined ? undefined : {
-                ...prev,
-                notesUnderCursor
-            })
+            setSheetMusicDisplayMusicDisplay(prev => prev === undefined
+                ? undefined
+                : {
+                    ...prev,
+                    notesUnderCursor
+                })
         }
 
-        function getNotesUnderCursor() {
+        function getNotesUnderCursor (): Set<number> {
             const result = new Set<number>()
 
             getCursor().NotesUnderCursor().forEach(note => {

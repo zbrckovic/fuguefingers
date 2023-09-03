@@ -1,13 +1,15 @@
-import {createPathBuilder} from "../../../utilities/path-builder";
+import { createPathBuilder } from '../../../utilities/path-builder'
 import {
-    BLACK_KEY_HEIGHT, BLACK_KEY_WIDTH,
-    C_E_CUT,
-    D_CUT, F_B_CUT, G_A_INNER_CUT, G_A_OUTER_CUT, WHITE_KEY_BOTTOM_PADDING,
-    WHITE_KEY_HEIGHT, WHITE_KEY_TOP_PADDING,
-    WHITE_KEY_WIDTH
-} from "../../dimensions";
+    BLACK_KEY_HEIGHT, BLACK_KEY_WIDTH, C_E_CUT, D_CUT, F_B_CUT, G_A_INNER_CUT, G_A_OUTER_CUT,
+    WHITE_KEY_BOTTOM_PADDING, WHITE_KEY_HEIGHT, WHITE_KEY_TOP_PADDING, WHITE_KEY_WIDTH
+} from '../../dimensions'
 
-const createKeyPathSupplier = (topPadding: number = 0, bottomPadding: number = 0) => {
+type KeyPathSupplier = (ordinal: number, edge?: 'bottomA' | 'topC') => string
+
+const createKeyPathSupplier = (
+    topPadding: number = 0,
+    bottomPadding: number = 0
+): KeyPathSupplier => {
     // SVG paths for all white keys.
     const keyPaths = [
         // C
@@ -101,11 +103,11 @@ const createKeyPathSupplier = (topPadding: number = 0, bottomPadding: number = 0
         .vertical(WHITE_KEY_HEIGHT - topPadding - bottomPadding)
         .close()
 
-    return (ordinal: number, edge?: "bottomA" | "topC") => {
+    return (ordinal: number, edge?: 'bottomA' | 'topC') => {
         switch (edge) {
-            case "bottomA":
+            case 'bottomA':
                 return bottomA
-            case "topC":
+            case 'topC':
                 return topC
             default:
                 return keyPaths[ordinal - 1]

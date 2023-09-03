@@ -1,29 +1,25 @@
-import {Note, NoteVelocities, Velocity} from "../../midi-constants"
-import {useCallback, useState} from "react"
+import { type Note, type NoteVelocities, type Velocity } from '../../midi-constants'
+import { useCallback, useState } from 'react'
 
-export const usePianoState = () => {
+interface PianoState {
+    readonly noteVelocities: Readonly<NoteVelocities>
+    readonly press: (note: Note, velocity: Velocity) => void
+    readonly release: (note: Note) => void
+    readonly clear: () => void
+}
+
+export const usePianoState = (): PianoState => {
     const [noteVelocities, setNoteVelocities] = useState<Readonly<NoteVelocities>>({})
 
     const press = useCallback((note: Note, velocity: Velocity) => {
-        setNoteVelocities(noteVelocities => ({
-            ...noteVelocities,
-            [note]: velocity
-        }))
+        setNoteVelocities(prev => ({ ...prev, [note]: velocity }))
     }, [])
 
     const release = useCallback((note: Note) => {
-        setNoteVelocities(noteVelocities => {
-            const {[note]: _, ...rest} = noteVelocities
-            return rest
-        })
+        setNoteVelocities(({ [note]: _, ...rest }) => rest)
     }, [])
 
-    const clear = useCallback(() => setNoteVelocities({}), [])
+    const clear = useCallback(() => { setNoteVelocities({}) }, [])
 
-    return {
-        noteVelocities,
-        press,
-        release,
-        clear
-    }
+    return { noteVelocities, press, release, clear }
 }

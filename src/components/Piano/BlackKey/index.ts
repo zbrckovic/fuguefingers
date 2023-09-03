@@ -1,1 +1,1 @@
-export {BlackKey} from './BlackKey'
+export { BlackKey } from './BlackKey'

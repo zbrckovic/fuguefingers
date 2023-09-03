@@ -1,5 +1,5 @@
-import React, {MutableRefObject} from "react"
-import {SheetMusicDisplay} from "../hooks/use-sheet-music-display"
+import React, { type FC, type MutableRefObject } from 'react'
+import { type SheetMusicDisplay } from '../hooks/use-sheet-music-display'
 
 interface Props {
     osmdRef: MutableRefObject<HTMLDivElement | null>
@@ -14,13 +14,19 @@ interface Props {
  * @param sheetMusicDisplay - sheet music display object.
  * @see useSheetMusicDisplay - hook that creates sheet music display object.
  */
-export const SheetMusic = ({osmdRef, sheetMusicDisplay}: Props) =>
+export const SheetMusic: FC<Props> = ({ osmdRef, sheetMusicDisplay }) =>
     <div>
         <div ref={osmdRef}/>
-        <button disabled={sheetMusicDisplay === undefined}
-                onClick={sheetMusicDisplay?.goBackward}>Backward
+        <button
+            disabled={sheetMusicDisplay === undefined}
+            onClick={sheetMusicDisplay?.goBackward}
+        >
+            Backward
         </button>
-        <button disabled={sheetMusicDisplay === undefined}
-                onClick={sheetMusicDisplay?.goForward}>Forward
+        <button
+            disabled={sheetMusicDisplay === undefined}
+            onClick={sheetMusicDisplay?.goForward}
+        >
+            Forward
         </button>
     </div>
