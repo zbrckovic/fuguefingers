@@ -1,10 +1,10 @@
-import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react'
-import { Piano } from '../Piano'
-import { useSheetMusicDisplay } from '../../hooks/use-sheet-music-display'
 import prelude from 'music-xml/wtk-prelude-1.xml'
-import { SheetMusic } from '../SheetMusic'
+import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useMidiInputListener } from '../../hooks/use-midi-input-listener'
 import { useMidiInputsUpdater } from '../../hooks/use-midi-inputs-updater'
+import { useSheetMusicDisplay } from '../../hooks/use-sheet-music-display'
+import { Piano } from '../Piano'
+import { SheetMusic } from '../SheetMusic'
 import { useMidiInputsState } from './use-midi-inputs-state'
 import { usePianoState } from './use-piano-state'
 
@@ -71,21 +71,21 @@ export const App: FC = () => {
     useMidiInputListener(selectedMidiInput, handlePress, handleRelease)
 
     return <div>
-        <SheetMusic osmdRef={ ref } sheetMusicDisplay={ sheetMusicDisplay }/>
+        <SheetMusic osmdRef={ref} sheetMusicDisplay={sheetMusicDisplay}/>
         <Piano
-            noteVelocities={ pianoState.noteVelocities }
-            markedNotes={ markedNotes }
-            onPress={ handlePress }
-            onRelease={ handleRelease }
+            noteVelocities={pianoState.noteVelocities}
+            markedNotes={markedNotes}
+            onPress={handlePress}
+            onRelease={handleRelease}
         />
-        <select value={ selectedMidiInputName } onChange={ ({ target }) => {
+        <select value={selectedMidiInputName} onChange={({ target }) => {
             setSelectedMidiInputName(target.value)
-        } }>
-            <option value={ '/' }/>
+        }}>
+            <option value={'/'}/>
             {
                 Object.entries(midiInputs).map(([id, input]) =>
-                    <option key={ id } value={ id }>
-                        { input.name }
+                    <option key={id} value={id}>
+                        {input.name}
                     </option>
                 )
             }
