@@ -1,7 +1,7 @@
 import {Note, NoteVelocities, Velocity} from "../../midi-constants"
-import {useCallback, useMemo, useState} from "react"
+import {useCallback, useState} from "react"
 
-export const usePianoKeyboardState = () => {
+export const usePianoState = () => {
     const [noteVelocities, setNoteVelocities] = useState<Readonly<NoteVelocities>>({})
 
     const press = useCallback((note: Note, velocity: Velocity) => {
@@ -18,9 +18,12 @@ export const usePianoKeyboardState = () => {
         })
     }, [])
 
+    const clear = useCallback(() => setNoteVelocities({}), [])
+
     return {
         noteVelocities,
         press,
-        release
+        release,
+        clear
     }
 }
