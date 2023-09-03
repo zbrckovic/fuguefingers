@@ -41,7 +41,7 @@ export const App: FC = () => {
     )
 
     useEffect(() => {
-        if (sheetMusicDisplay === undefined || sheetMusicDisplay.isMusicXmlLoaded) return
+        if (sheetMusicDisplay === undefined || !sheetMusicDisplay.isMusicXmlLoaded) return
 
         let areAllNotesPressed = true
         markedNotes.forEach(note => {
