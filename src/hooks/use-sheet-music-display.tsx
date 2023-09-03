@@ -6,7 +6,9 @@ export interface SheetMusicDisplay {
     readonly isMusicXmlLoaded: boolean
     readonly isMusicXmlLoading: boolean
     readonly notesUnderCursor: Set<number>
+}
 
+export interface SheetMusicDisplayActions {
     readonly loadMusicXml: (url: string) => void
 
     /** Moves the main cursor forward. */
@@ -16,12 +18,13 @@ export interface SheetMusicDisplay {
     readonly goBackward: () => void
 }
 
-type Result<T> = [MutableRefObject<T | null>, SheetMusicDisplay | undefined]
+type Result<T> = [MutableRefObject<T | null>, SheetMusicDisplay | undefined, SheetMusicDisplayActions]
 
 export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
     const containerRef = useRef<T>(null)
     const { isMounted, unmount } = useIsMounted()
     const [sheetMusicDisplay, setSheetMusicDisplayMusicDisplay] = useState<SheetMusicDisplay | undefined>()
+    const [actions, setActions] = useState<SheetMusicDisplayActions | undefined>()
 
     useLayoutEffect(() => {
         if (containerRef.current === undefined || containerRef.current === null) {
@@ -71,11 +74,10 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
         setSheetMusicDisplayMusicDisplay({
             isMusicXmlLoaded: false,
             isMusicXmlLoading: false,
-            notesUnderCursor: new Set<number>(),
-            loadMusicXml,
-            goBackward,
-            goForward
+            notesUnderCursor: new Set<number>()
         })
+
+        setActions({ loadMusicXml, goBackward, goForward })
 
         return unmount
 
@@ -111,7 +113,7 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
         }
     }, [isMounted, unmount])
 
-    return [containerRef, sheetMusicDisplay] as Result<T>
+    return [containerRef, sheetMusicDisplay, actions] as Result<T>
 }
 
 const osmdOptions = {

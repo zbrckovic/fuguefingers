@@ -13,27 +13,27 @@ export const App: FC = () => {
     const [musicXml] = useState(prelude)
 
     // Global piano state which shows all pressed keys.
-    const pianoState = usePianoState()
+    const [noteVelocities, pianoActions] = usePianoState()
 
     // Momentary piano state which is a subset of global state. It shows only pressed keys at
     // current moment. It is used to test against marked notes.
-    const momentaryPianoState = usePianoState()
+    const [momentaryNoteVelocities, momentaryPianoActions] = usePianoState()
 
     const handlePress = useCallback((note: number, velocity: number) => {
-        pianoState.press(note, velocity)
-        momentaryPianoState.press(note, velocity)
-    }, [pianoState.press, momentaryPianoState.press])
+        pianoActions.press(note, velocity)
+        momentaryPianoActions.press(note, velocity)
+    }, [pianoActions, momentaryPianoActions])
 
     const handleRelease = useCallback((note: number) => {
-        pianoState.release(note)
-        momentaryPianoState.release(note)
-    }, [pianoState.release, momentaryPianoState.release])
+        pianoActions.release(note)
+        momentaryPianoActions.release(note)
+    }, [pianoActions, momentaryPianoActions])
 
-    const [ref, sheetMusicDisplay] = useSheetMusicDisplay<HTMLDivElement>()
+    const [ref, sheetMusicDisplay, sheetMusicDisplayActions] = useSheetMusicDisplay<HTMLDivElement>()
 
     useEffect(() => {
-        if (musicXml !== undefined) sheetMusicDisplay?.loadMusicXml(musicXml)
-    }, [sheetMusicDisplay?.loadMusicXml, musicXml])
+        if (musicXml !== undefined) sheetMusicDisplayActions?.loadMusicXml(musicXml)
+    }, [sheetMusicDisplayActions, musicXml])
 
     const markedNotes: Set<number> = useMemo(
         () => sheetMusicDisplay?.notesUnderCursor ?? new Set(),
@@ -41,39 +41,37 @@ export const App: FC = () => {
     )
 
     useEffect(() => {
-        if (sheetMusicDisplay === undefined || !sheetMusicDisplay.isMusicXmlLoaded) return
+        const isMusicXmlLoaded = sheetMusicDisplay?.isMusicXmlLoaded ?? false
+        if (!isMusicXmlLoaded) return
 
         let areAllNotesPressed = true
         markedNotes.forEach(note => {
             areAllNotesPressed =
-                areAllNotesPressed && momentaryPianoState.noteVelocities[note] !== undefined
+                areAllNotesPressed && momentaryNoteVelocities[note] !== undefined
         })
         if (areAllNotesPressed) {
-            momentaryPianoState.clear()
-            sheetMusicDisplay.goForward()
+            momentaryPianoActions.clear()
+            sheetMusicDisplayActions.goForward()
         }
     }, [
-        sheetMusicDisplay?.isMusicXmlLoaded,
-        sheetMusicDisplay?.goForward,
-        momentaryPianoState.noteVelocities,
-        momentaryPianoState.clear,
-        markedNotes
+        momentaryNoteVelocities,
+        markedNotes,
+        momentaryPianoActions,
+        sheetMusicDisplayActions,
+        sheetMusicDisplay?.isMusicXmlLoaded
     ])
 
-    const {
-        midiInputs,
-        selectedMidiInputName,
-        selectedMidiInput,
-        setSelectedMidiInputName,
-        setMidiInputs
-    } = useMidiInputsState()
+    const [
+        { midiInputs, selectedMidiInputName, selectedMidiInput },
+        { setMidiInputs, setSelectedMidiInputName }
+    ] = useMidiInputsState()
     useMidiInputsUpdater(setMidiInputs)
     useMidiInputListener(selectedMidiInput, handlePress, handleRelease)
 
     return <div>
         <SheetMusic osmdRef={ref} sheetMusicDisplay={sheetMusicDisplay}/>
         <Piano
-            noteVelocities={pianoState.noteVelocities}
+            noteVelocities={noteVelocities}
             markedNotes={markedNotes}
             onPress={handlePress}
             onRelease={handleRelease}
