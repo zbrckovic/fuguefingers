@@ -115,6 +115,8 @@ const osmdOptions = {
     drawComposer: false,
     drawLyricist: false,
     drawPartNames: false,
-    renderSingleHorizontalStaffline: true,
-    followCursor: true
+    renderSingleHorizontalStaffline: false,
+    followCursor: true,
+    drawMeasureNumbers: true,
+    measureNumberInterval: 1
 }

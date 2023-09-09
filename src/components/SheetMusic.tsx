@@ -1,5 +1,7 @@
 import React, { type FC, type MutableRefObject } from 'react'
 import { type SheetMusicDisplay } from '../sheet-music-display'
+import { useResizeObserver } from '../utilities/use-resize-observer'
+import styles from './SheetMusic.module.sass'
 
 interface Props {
     osmdRef: MutableRefObject<HTMLDivElement | null>
@@ -14,8 +16,10 @@ interface Props {
  * @param sheetMusicDisplay - sheet music display object.
  * @see useSheetMusicDisplay - hook that creates sheet music display object.
  */
-export const SheetMusic: FC<Props> = ({ osmdRef, sheetMusicDisplay }) =>
-    <div>
+export const SheetMusic: FC<Props> = ({ osmdRef, sheetMusicDisplay }) => {
+    const ref = useResizeObserver<HTMLDivElement>()
+
+    return <main ref={ref} className={styles.root}>
         <div ref={osmdRef}/>
         <button
             disabled={sheetMusicDisplay === undefined}
@@ -29,4 +33,5 @@ export const SheetMusic: FC<Props> = ({ osmdRef, sheetMusicDisplay }) =>
         >
             Forward
         </button>
-    </div>
+    </main>
+}

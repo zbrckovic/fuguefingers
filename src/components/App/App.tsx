@@ -7,6 +7,7 @@ import { Piano } from '../Piano'
 import { SheetMusic } from '../SheetMusic'
 import { useMidiInputsState } from './use-midi-inputs-state'
 import { usePianoState } from './use-piano-state'
+import styles from './App.module.sass'
 
 export const App: FC = () => {
     // Sheet music to display.
@@ -75,25 +76,27 @@ export const App: FC = () => {
     useMidiInputsUpdater(setMidiInputs)
     useMidiInputListener(selectedMidiInput, handlePress, handleRelease)
 
-    return <div>
+    return <div className={styles.root}>
         <SheetMusic osmdRef={containerRef} sheetMusicDisplay={sheetMusicDisplay}/>
-        <Piano
-            noteVelocities={noteVelocities}
-            markedNotes={markedNotes}
-            onPress={handlePress}
-            onRelease={handleRelease}
-        />
-        <select value={selectedMidiInputName} onChange={({ target }) => {
-            setSelectedMidiInputName(target.value)
-        }}>
-            <option value={'/'}/>
-            {
-                Object.entries(midiInputs).map(([id, input]) =>
-                    <option key={id} value={id}>
-                        {input.name}
-                    </option>
-                )
-            }
-        </select>
+        <footer>
+            <Piano
+                noteVelocities={noteVelocities}
+                markedNotes={markedNotes}
+                onPress={handlePress}
+                onRelease={handleRelease}
+            />
+            <select
+                value={selectedMidiInputName}
+                onChange={({ target }) => { setSelectedMidiInputName(target.value) }}>
+                <option value={'/'}/>
+                {
+                    Object.entries(midiInputs).map(([id, input]) =>
+                        <option key={id} value={id}>
+                            {input.name}
+                        </option>
+                    )
+                }
+            </select>
+        </footer>
     </div>
 }
