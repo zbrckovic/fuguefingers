@@ -29,19 +29,19 @@ export const App: FC = () => {
         momentaryPianoActions.release(note)
     }, [pianoActions, momentaryPianoActions])
 
-    const [ref, sheetMusicDisplay, sheetMusicDisplayActions] = useSheetMusicDisplay<HTMLDivElement>()
+    const { containerRef, sheetMusicDisplay } = useSheetMusicDisplay<HTMLDivElement>()
 
     useEffect(() => {
-        if (musicXml !== undefined) sheetMusicDisplayActions?.loadMusicXml(musicXml)
-    }, [sheetMusicDisplayActions, musicXml])
+        if (musicXml !== undefined) sheetMusicDisplay?.actions?.loadMusicXml(musicXml)
+    }, [sheetMusicDisplay?.actions, musicXml])
 
     const markedNotes: Set<number> = useMemo(
-        () => sheetMusicDisplay?.notesUnderCursor ?? new Set(),
-        [sheetMusicDisplay?.notesUnderCursor]
+        () => sheetMusicDisplay?.state.notesUnderCursor ?? new Set(),
+        [sheetMusicDisplay?.state.notesUnderCursor]
     )
 
     useEffect(() => {
-        const isMusicXmlLoaded = sheetMusicDisplay?.isMusicXmlLoaded ?? false
+        const isMusicXmlLoaded = sheetMusicDisplay?.state.isMusicXmlLoaded ?? false
         if (!isMusicXmlLoaded) return
 
         let areAllNotesPressed = true
@@ -51,25 +51,32 @@ export const App: FC = () => {
         })
         if (areAllNotesPressed) {
             momentaryPianoActions.clear()
-            sheetMusicDisplayActions.goForward()
+            sheetMusicDisplay?.actions.goForward()
         }
     }, [
         momentaryNoteVelocities,
         markedNotes,
         momentaryPianoActions,
-        sheetMusicDisplayActions,
-        sheetMusicDisplay?.isMusicXmlLoaded
+        sheetMusicDisplay?.state.isMusicXmlLoaded,
+        sheetMusicDisplay?.actions
     ])
 
     const [
-        { midiInputs, selectedMidiInputName, selectedMidiInput },
-        { setMidiInputs, setSelectedMidiInputName }
+        {
+            midiInputs,
+            selectedMidiInputName,
+            selectedMidiInput
+        },
+        {
+            setMidiInputs,
+            setSelectedMidiInputName
+        }
     ] = useMidiInputsState()
     useMidiInputsUpdater(setMidiInputs)
     useMidiInputListener(selectedMidiInput, handlePress, handleRelease)
 
     return <div>
-        <SheetMusic osmdRef={ref} sheetMusicDisplay={sheetMusicDisplay}/>
+        <SheetMusic osmdRef={containerRef} sheetMusicDisplay={sheetMusicDisplay}/>
         <Piano
             noteVelocities={noteVelocities}
             markedNotes={markedNotes}

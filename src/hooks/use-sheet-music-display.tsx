@@ -1,34 +1,25 @@
 import { type Cursor, OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
 import { type MutableRefObject, useLayoutEffect, useRef, useState } from 'react'
+import {
+    type SheetMusicDisplay, type SheetMusicDisplayActions, type SheetMusicDisplayState
+} from '../sheet-music-display'
 import { useIsMounted } from './misc-hooks'
 
-export interface SheetMusicDisplay {
-    readonly isMusicXmlLoaded: boolean
-    readonly isMusicXmlLoading: boolean
-    readonly notesUnderCursor: Set<number>
+interface Result<T> {
+    readonly containerRef: MutableRefObject<T | null>
+    readonly sheetMusicDisplay?: SheetMusicDisplay
 }
-
-export interface SheetMusicDisplayActions {
-    readonly loadMusicXml: (url: string) => void
-
-    /** Moves the main cursor forward. */
-    readonly goForward: () => void
-
-    /** Moves the main cursor backward. */
-    readonly goBackward: () => void
-}
-
-type Result<T> = [MutableRefObject<T | null>, SheetMusicDisplay | undefined, SheetMusicDisplayActions]
 
 export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
     const containerRef = useRef<T>(null)
     const { isMounted, unmount } = useIsMounted()
-    const [sheetMusicDisplay, setSheetMusicDisplayMusicDisplay] = useState<SheetMusicDisplay | undefined>()
-    const [actions, setActions] = useState<SheetMusicDisplayActions | undefined>()
+
+    const [state, setState] = useState<SheetMusicDisplayState>()
+    const [actions, setActions] = useState<SheetMusicDisplayActions>()
 
     useLayoutEffect(() => {
         if (containerRef.current === undefined || containerRef.current === null) {
-            setSheetMusicDisplayMusicDisplay(undefined)
+            setState(undefined)
             return
         }
 
@@ -36,12 +27,11 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
         osmd.setOptions(osmdOptions)
 
         function loadMusicXml (url: string): void {
-            setSheetMusicDisplayMusicDisplay(prev => prev === undefined
-                ? undefined
-                : ({
-                    ...prev,
-                    isMusicXmlLoading: true
-                }))
+            setState(
+                prev => prev === undefined
+                    ? undefined
+                    : ({ ...prev, isMusicXmlLoading: true })
+            )
 
             osmd
                 .load(url)
@@ -49,7 +39,7 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
                     if (!isMounted()) return
                     osmd.render()
                     getCursor().show()
-                    setSheetMusicDisplayMusicDisplay(prev => prev === undefined
+                    setState(prev => prev === undefined
                         ? undefined
                         : {
                             ...prev,
@@ -71,7 +61,7 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
             updateNotesUnderCursor()
         }
 
-        setSheetMusicDisplayMusicDisplay({
+        setState({
             isMusicXmlLoaded: false,
             isMusicXmlLoading: false,
             notesUnderCursor: new Set<number>()
@@ -86,12 +76,7 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
 
         function updateNotesUnderCursor (): void {
             const notesUnderCursor = getNotesUnderCursor()
-            setSheetMusicDisplayMusicDisplay(prev => prev === undefined
-                ? undefined
-                : {
-                    ...prev,
-                    notesUnderCursor
-                })
+            setState(prev => prev === undefined ? undefined : { ...prev, notesUnderCursor })
         }
 
         function getNotesUnderCursor (): Set<number> {
@@ -113,7 +98,12 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
         }
     }, [isMounted, unmount])
 
-    return [containerRef, sheetMusicDisplay, actions] as Result<T>
+    return {
+        containerRef,
+        sheetMusicDisplay: state !== undefined && actions !== undefined
+            ? { state, actions }
+            : undefined
+    }
 }
 
 const osmdOptions = {

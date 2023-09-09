@@ -1,9 +1,9 @@
 import React, { type FC, type MutableRefObject } from 'react'
-import { type SheetMusicDisplay } from '../hooks/use-sheet-music-display'
+import { type SheetMusicDisplay } from '../sheet-music-display'
 
 interface Props {
     osmdRef: MutableRefObject<HTMLDivElement | null>
-    sheetMusicDisplay: SheetMusicDisplay | undefined
+    sheetMusicDisplay?: SheetMusicDisplay
 }
 
 /**
@@ -19,13 +19,13 @@ export const SheetMusic: FC<Props> = ({ osmdRef, sheetMusicDisplay }) =>
         <div ref={osmdRef}/>
         <button
             disabled={sheetMusicDisplay === undefined}
-            onClick={sheetMusicDisplay?.goBackward}
+            onClick={sheetMusicDisplay?.actions.goBackward}
         >
             Backward
         </button>
         <button
             disabled={sheetMusicDisplay === undefined}
-            onClick={sheetMusicDisplay?.goForward}
+            onClick={sheetMusicDisplay?.actions.goForward}
         >
             Forward
         </button>
