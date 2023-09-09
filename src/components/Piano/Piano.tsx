@@ -5,25 +5,35 @@ import { pianoKeys } from '../../piano-key'
 import {
     A_SHARP_OFFSET, C_SHARP_OFFSET, D_SHARP_OFFSET, F_SHARP_OFFSET, G_SHARP_OFFSET, KEYBOARD_HEIGHT,
     KEYBOARD_WIDTH, WHITE_KEY_WIDTH
-} from '../dimensions'
+} from './dimensions'
 import { BlackKey } from './BlackKey'
 import styles from './Piano.module.sass'
 import { WhiteKey } from './WhiteKey'
 
 interface Props {
     className?: string
+    width: number
+    height: number
     noteVelocities: NoteVelocities
-    markedNotes: Set<number>
+    markedNotes: ReadonlySet<number>
     onPress: (note: number, velocity: number) => void
     onRelease: (note: number) => void
 }
 
-export const Piano: FC<Props> = ({ className, noteVelocities, markedNotes, onPress, onRelease }) =>
+export const Piano: FC<Props> = ({
+    className,
+    width,
+    height,
+    noteVelocities,
+    markedNotes,
+    onPress,
+    onRelease
+}) =>
     <svg
         className={classNames(styles.root, className)}
         viewBox={`${0} ${0} ${KEYBOARD_WIDTH} ${KEYBOARD_HEIGHT}`}
-        width={KEYBOARD_WIDTH}
-        height={KEYBOARD_HEIGHT}
+        width={width}
+        height={height}
     >
         {
             pianoKeys.white.map((pianoKey, i) => (

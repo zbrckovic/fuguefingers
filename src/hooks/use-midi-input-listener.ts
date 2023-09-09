@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { MidiCommand, type Note } from '../midi-constants'
-import { useIsMounted } from './misc-hooks'
+import { useIsMounted } from './use-is-mounted'
 
 /**
  * Listens to MIDI input and calls the appropriate callback when a note is pressed or released.

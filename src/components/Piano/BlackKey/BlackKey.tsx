@@ -4,7 +4,7 @@ import { type Velocity } from '../../../midi-constants'
 import { type PianoKey } from '../../../piano-key'
 import {
     BLACK_KEY_HEIGHT, BLACK_KEY_WIDTH, MARKER_BOTTOM_PADDING, MARKER_RADIUS
-} from '../../dimensions'
+} from '../dimensions'
 import { keyVelocityCalculator } from '../velocity-calculator'
 import { mainShapePath, velocitySensitiveShapePath } from './black-key-svg-paths'
 import styles from './BlackKey.module.sass'

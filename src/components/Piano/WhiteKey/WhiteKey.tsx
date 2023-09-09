@@ -4,7 +4,7 @@ import { BOTTOM_A, TOP_C, type Velocity } from '../../../midi-constants'
 import { type PianoKey } from '../../../piano-key'
 import {
     MARKER_BOTTOM_PADDING, MARKER_RADIUS, WHITE_KEY_HEIGHT, WHITE_KEY_WIDTH
-} from '../../dimensions'
+} from '../dimensions'
 import { keyVelocityCalculator } from '../velocity-calculator'
 import { getMainShapePath, getVelocitySensitiveShapePath } from './white-key-svg-paths'
 

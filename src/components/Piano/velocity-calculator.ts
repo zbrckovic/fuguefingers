@@ -2,7 +2,7 @@ import { NOTE_VELOCITY_MAX, NOTE_VELOCITY_MIN } from '../../midi-constants'
 import {
     BLACK_KEY_TOP_PADDING, BLACK_KEY_VELOCITY_SENSITIVE_PART_HEIGHT, WHITE_KEY_TOP_PADDING,
     WHITE_KEY_VELOCITY_SENSITIVE_PART_HEIGHT
-} from '../dimensions'
+} from './dimensions'
 
 export const keyVelocityCalculator = {
     white: {

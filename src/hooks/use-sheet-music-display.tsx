@@ -2,8 +2,8 @@ import { type Cursor, OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
 import { type MutableRefObject, useLayoutEffect, useRef, useState } from 'react'
 import {
     type SheetMusicDisplay, type SheetMusicDisplayActions, type SheetMusicDisplayState
-} from '../sheet-music-display'
-import { useIsMounted } from './misc-hooks'
+} from '../domain/sheet-music-display'
+import { useIsMounted } from './use-is-mounted'
 
 interface Result<T> {
     readonly containerRef: MutableRefObject<T | null>
@@ -108,7 +108,7 @@ export const useSheetMusicDisplay = <T extends HTMLElement> (): Result<T> => {
 
 const osmdOptions = {
     backend: 'svg',
-    drawingParameters: 'compacttight',
+    drawingParameters: 'compact',
     drawCredits: false,
     drawTitle: false,
     drawSubtitle: false,

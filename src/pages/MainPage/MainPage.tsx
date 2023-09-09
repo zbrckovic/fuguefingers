@@ -1,15 +1,15 @@
 import prelude from 'music-xml/wtk-prelude-1.xml'
 import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react'
-import { useMidiInputListener } from '../../hooks/use-midi-input-listener'
-import { useMidiInputsUpdater } from '../../hooks/use-midi-inputs-updater'
-import { useSheetMusicDisplay } from '../../hooks/use-sheet-music-display'
-import { Piano } from '../Piano'
-import { SheetMusic } from '../SheetMusic'
+import { useMidiInputListener } from 'hooks/use-midi-input-listener'
+import { useMidiInputsUpdater } from 'hooks/use-midi-inputs-updater'
+import { useSheetMusicDisplay } from 'hooks/use-sheet-music-display'
+import { SheetMusic } from 'components/SheetMusic'
+import { Footer } from './Footer'
 import { useMidiInputsState } from './use-midi-inputs-state'
 import { usePianoState } from './use-piano-state'
-import styles from './App.module.sass'
+import styles from './MainPage.module.sass'
 
-export const App: FC = () => {
+export const MainPage: FC = () => {
     // Sheet music to display.
     const [musicXml] = useState(prelude)
 
@@ -77,26 +77,21 @@ export const App: FC = () => {
     useMidiInputListener(selectedMidiInput, handlePress, handleRelease)
 
     return <div className={styles.root}>
-        <SheetMusic osmdRef={containerRef} sheetMusicDisplay={sheetMusicDisplay}/>
-        <footer>
-            <Piano
-                noteVelocities={noteVelocities}
-                markedNotes={markedNotes}
-                onPress={handlePress}
-                onRelease={handleRelease}
-            />
-            <select
+        <main className={styles.main}>
+            <SheetMusic
+                className={styles.sheetMusic}
+                osmdRef={containerRef}
+                sheetMusicDisplay={sheetMusicDisplay}
                 value={selectedMidiInputName}
-                onChange={({ target }) => { setSelectedMidiInputName(target.value) }}>
-                <option value={'/'}/>
-                {
-                    Object.entries(midiInputs).map(([id, input]) =>
-                        <option key={id} value={id}>
-                            {input.name}
-                        </option>
-                    )
-                }
-            </select>
-        </footer>
+                onChange={setSelectedMidiInputName}
+                midiInputs={midiInputs}
+            />
+        </main>
+        <Footer
+            noteVelocities={noteVelocities}
+            markedNotes={markedNotes}
+            onPress={handlePress}
+            onRelease={handleRelease}
+        />
     </div>
 }

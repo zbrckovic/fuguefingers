@@ -2,7 +2,7 @@ import { createPathBuilder } from '../../../utilities/path-builder'
 import {
     BLACK_KEY_HEIGHT, BLACK_KEY_WIDTH, C_E_CUT, D_CUT, F_B_CUT, G_A_INNER_CUT, G_A_OUTER_CUT,
     WHITE_KEY_BOTTOM_PADDING, WHITE_KEY_HEIGHT, WHITE_KEY_TOP_PADDING, WHITE_KEY_WIDTH
-} from '../../dimensions'
+} from '../dimensions'
 
 type KeyPathSupplier = (ordinal: number, edge?: 'bottomA' | 'topC') => string
 

@@ -1,6 +1,6 @@
 import { type Dispatch, type SetStateAction, useEffect } from 'react'
 import { type MidiInputs } from '../midi-constants'
-import { useIsMounted } from './misc-hooks'
+import { useIsMounted } from './use-is-mounted'
 
 /**
  * Loads MIDI inputs and updates the state with them.

@@ -1,7 +1,7 @@
 import { createPathBuilder } from '../../../utilities/path-builder'
 import {
     BLACK_KEY_BOTTOM_PADDING, BLACK_KEY_HEIGHT, BLACK_KEY_TOP_PADDING, BLACK_KEY_WIDTH
-} from '../../dimensions'
+} from '../dimensions'
 
 const createKeyPath = (topPadding = 0, bottomPadding = 0): string =>
     createPathBuilder()
